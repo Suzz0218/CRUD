@@ -18,10 +18,7 @@ exports.createUser = catchAsyncErrors(async (req, res, next) => {
     lname,
     email,
     password,
-    // avatar: {
-    //   public_id: result.public_id,
-    //   url: result.secure_url,
-    // },
+    // image: req.file.filename,
   });
 
   sendTokenToCookie(newUser, 200, res);
@@ -63,7 +60,15 @@ exports.getAllUsers = catchAsyncErrors(async (req, res, next) => {
 exports.updateUserProfile = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(
     req.user.id,
-    { $set: req.body },
+    {
+      $set: {
+        fname: req.body.fname,
+        lname: req.body.lname,
+        email: req.body.email,
+        password: req.body.password,
+        image: req.file.filename,
+      },
+    },
     { new: true, runValidators: true }
   );
 

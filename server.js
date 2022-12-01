@@ -9,20 +9,22 @@ process.on("uncaughtException", (err) => {
   process.exit(1);
 });
 
-
 const PORT = process.env.PORT;
 const MODE = process.env.NODE_ENV;
 
 dbConnect();
 
-app.get('/', async(req, res) => {
-  res.send('hello')
-})
+app.get("/", async (req, res) => {
+  res.render("index", { title: "Postol Forum" });
+});
+
+app.get("/authenticate", async (req, res) => {
+  res.render("auth", { title: "Postol Authenticate" });
+});
 
 const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT} in ${MODE} mode`);
 });
-
 
 process.on("unhandledRejection", (err) => {
   console.log(`Server ERR: ${err.message}`),

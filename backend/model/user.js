@@ -26,15 +26,8 @@ const userSchema = new Schema(
       select: false,
       minlength: [6, "Your password must be longer than six characters"],
     },
-    avatar: {
-      public_id: {
-        type: String,
-        require: true,
-      },
-      url: {
-        type: String,
-        require: true,
-      },
+    image: {
+      type: String,
     },
     role: {
       type: String,
