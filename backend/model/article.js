@@ -12,25 +12,12 @@ const articleSchema = new Schema({
   },
   headLine: {
     type: String,
-    required: [true, "please headline for your article"],
   },
   subHead: {
     type: String,
-    required: [true, "kindly provide a subhead details"],
   },
   content: {
     type: String,
-    required: [true, "please provide your article content"],
-  },
-  image: {
-    public_id: {
-      type: String,
-      require: true,
-    },
-    url: {
-      type: String,
-      require: true,
-    },
   },
 });
 

@@ -2,27 +2,12 @@ const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 const User = require("../model/user");
 const sendTokenToCookie = require("../utils/cookies");
 const ErrorHandler = require("../utils/errorHandler");
+const express = require("express");
+const upload = require("../middlewares/upload");
+const router = express.Router();
 
 // Register User
-exports.createUser = catchAsyncErrors(async (req, res, next) => {
-  const { fname, lname, email, password } = req.body;
-
-  let user = await User.findOne({ email });
-
-  if (user) {
-    return next(new ErrorHandler(`${profile.email} already exist.`, 400));
-  }
-
-  const newUser = await user.create({
-    fname,
-    lname,
-    email,
-    password,
-    // image: req.file.filename,
-  });
-
-  sendTokenToCookie(newUser, 200, res);
-});
+// router.post('/signup', upload, )
 
 // User Login/SignIn => Public route: /api/v1/signin
 exports.signIn = catchAsyncErrors(async (req, res, next) => {

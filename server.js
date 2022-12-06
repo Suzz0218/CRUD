@@ -1,33 +1,38 @@
 const app = require("./backend/app");
+const express = require("express");
 const dotenv = require("dotenv");
 const dbConnect = require("./backend/config/dbConfig");
 dotenv.config({ path: "./backend/config/config.env" });
-
-process.on("uncaughtException", (err) => {
-  console.log(err.message),
-    console.log(`Shutting down due to uncaught exception`);
-  process.exit(1);
-});
 
 const PORT = process.env.PORT;
 const MODE = process.env.NODE_ENV;
 
 dbConnect();
 
-app.get("/", async (req, res) => {
-  res.render("index", { title: "Postol Forum" });
-});
+app.use(express.static("uploads"));
 
-app.get("/authenticate", async (req, res) => {
+app.get("/", async (req, res) => {
+  res.render("index", { title: "Postol Authenticate" });
+});
+app.get("/signup", async (req, res) => {
   res.render("auth", { title: "Postol Authenticate" });
 });
-
-const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT} in ${MODE} mode`);
+app.get("/signin", async (req, res) => {
+  res.render("signin", { title: "Postol Authenticate" });
+});
+app.get("/profile/:id", async (req, res) => {
+  res.render("profile", { title: "Postol Authenticate" });
+});
+app.get("/write/:id", async (req, res) => {
+  res.render("write", { title: "Create Article" });
+});
+app.get("/article", async (req, res) => {
+  res.render("article", { title: "Postol Authenticate" });
+});
+app.get("/myarticle", async (req, res) => {
+  res.render("myarticle", { title: "Postol Authenticate" });
 });
 
-process.on("unhandledRejection", (err) => {
-  console.log(`Server ERR: ${err.message}`),
-    console.log(`Shutting down server due to unhandled error rejections`),
-    server.close(() => process.exit(1));
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT} in ${MODE} mode`);
 });

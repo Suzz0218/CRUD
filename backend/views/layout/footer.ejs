@@ -5,5 +5,10 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
+    <script>
+      document.getElementById('file').onchange = function () {
+      var src = URL.createObjectURL(this.files[0])
+      document.getElementById('image').src = src}
+    </script>
   </body>
 </html>

@@ -25,6 +25,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+
     <title><%= title %></title>
   </head>
   <body>
@@ -36,9 +37,18 @@
               <img src="/assets/Vector.png" class="logo" alt="Postol forum"
             /></a>
           </div>
+
+          <% if (message) { %>
           <div>
-            <a href="/authenticate" class="btn-getStarted">Get started</a>
+            <a href="/profile/<%= message.user._id%>" class="btnc-profile"
+              >Hello <%= message.user.fname + " " +  message.user.lname %></a
+            >
           </div>
+          <% } else {%>
+          <div>
+            <a href="/signup" class="btn-getStarted">Get started</a>
+          </div>
+          <% } %>
         </div>
       </div>
     </header>
