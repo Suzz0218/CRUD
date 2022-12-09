@@ -38,7 +38,7 @@ router.post("/signup", upload, (req, res) => {
     fname: req.body.fname,
     lname: req.body.lname,
     email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8),
+    password: req.body.password,
     image: req.file.filename,
   });
 
