@@ -9,6 +9,17 @@
       document.getElementById('file').onchange = function () {
       var src = URL.createObjectURL(this.files[0])
       document.getElementById('image').src = src}
+
+      document.onload = function () {
+
+        if(users !== null) {
+          let CreatedAt = new Date(users.forEach(user => {
+            user.createdAt
+          })).toDateString()
+  
+          document.getElementById('createdAt') = CreatedAt
+        }
+      }
     </script>
   </body>
 </html>

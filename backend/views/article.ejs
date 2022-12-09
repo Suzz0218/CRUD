@@ -1,15 +1,15 @@
 <%- include("layout/header") %>
 
 <div class="main main-height">
-  <% if (message) { %>
+  <% if (notify) { %>
   <div class="box">
     <div class="m_wrapper">
       <div class="wrapper_modal">
         <div class="wrapper_modal-dialog">
           <div class="wrapper_modal-content">
-            <div class="wrapper_modal-body"><%= message.message %></div>
+            <div class="wrapper_modal-body"><%= notify.message %></div>
             <a
-              href="/article/<%= message.id %> "
+              href="/article/<%= article._id %> "
               class="btnc btnc-danger modal_btn"
               >Back</a
             >
@@ -20,7 +20,7 @@
   </div>
 
   <% } %>
-  <div class="container">
+  <div class="container sub-height">
     <div class="row">
       <div class="col-lg-8 m-auto">
         <div class="py-6">
@@ -28,22 +28,26 @@
             <div class="py-2 my-2 overflow-hidden">
               <div class="container">
                 <div class="row">
-                  <div class="col-4 profile_justify">
+                  <div class="col-lg-4 col-md-12 col-sm-12 profile_justify">
                     <img
                       src="/<%= article.user.image %>"
                       class="avatar"
                       alt="profile"
                     />
-                    <h3 class="mt-4"><%= article.fname + article.lname %></h3>
+                    <h3 class="mt-4 fw-600">
+                      Created by <%= article.createdBy %>
+                    </h3>
                   </div>
-                  <div class="col-md-8">
+                  <div class="col-lg-8 col-md-12">
                     <div class="my-4">
-                      <h3 class="text-dark px-2 py-2">
-                        <%= article.headLine %>>
+                      <h3 class="text-dark px-2 py-2 fw-600">
+                        <%= article.headLine %>
                       </h3>
                     </div>
                     <div class="my-4">
-                      <h3 class="text-dark px-2 py-2"><%= article.subHead%></h3>
+                      <h3 class="text-dark px-2 py-2 fw-600">
+                        <%= article.subHead%>
+                      </h3>
                     </div>
                   </div>
                 </div>
@@ -59,8 +63,34 @@
                       id="comment"
                       name="comment"
                     >
-                    <%= article.content%>
-                    </textarea>
+<%= article.content%></textarea
+                    >
+                  </div>
+                  <div class="col-md-12">
+                    <div class="btnc-position">
+                      <% if (message) { %>
+                      <a
+                        href="/myarticles/<%= message.user._id %> "
+                        class="btnc btnc-secondary my-2 mr-4"
+                      >
+                        View all your articles here</a
+                      >
+                      <a
+                        href="/write/<%= message.user._id %> "
+                        class="btnc btnc-secondary my-2 mr-4"
+                      >
+                        Write article</a
+                      >
+                      <% } else{%>
+
+                      <a href="/signup " class="btnc btnc-secondary my-2 mr-4">
+                        Write article</a
+                      >
+                      <a href="/" class="btnc btnc-secondary my-2 mr-4">
+                        Back</a
+                      >
+                      <% } %>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -10,14 +10,12 @@
               Once it's confirmed, this cannnot be undone.<br />Would you like
               to delete this article?
             </div>
-            <div class="modal_btn">
-              <button
-                type="button"
+            <div class="modal_btn mt-4">
+              <a
+                href="/myarticle/<%= article._id %> "
                 class="btnc btnc-secondary"
-                data-bs-dismiss="modal"
+                >Back</a
               >
-                Cancel
-              </button>
               <a
                 href="/delete/article/<%= article._id %>"
                 class="btnc btnc-danger"
@@ -29,7 +27,7 @@
       </div>
     </div>
   </div>
-  <div class="container">
+  <div class="container sub-height">
     <div class="row">
       <div class="col-lg-8 m-auto">
         <div class="py-6">
@@ -40,11 +38,11 @@
                   <div class="row">
                     <div class="col-4 profile_justify">
                       <img
-                        src="/<%= article.user.image %> "
-                        class="profile"
+                        src="/<%=message.user.image %> "
+                        class="avatar"
                         alt="profile"
                       />
-                      <h3><%=article.user.fname + article.user.lname%></h3>
+                      <h3 class="my-4">Created by: You</h3>
                     </div>
                     <div class="col-md-8">
                       <div class="my-4">
@@ -73,7 +71,7 @@
                   </div>
                 </div>
               </div>
-              <div class="py-2 my-2 ">
+              <div class="py-2 my-2">
                 <div class="container">
                   <div class="row">
                     <div class="col-md-12">
@@ -82,7 +80,8 @@
                         id="content"
                         rows="12"
                         class="form-control"
-                      ></textarea>
+                      >
+<%=article.content%></textarea
                       >
                       <div class="btnc-position">
                         <button
@@ -91,11 +90,11 @@
                           data-bs-toggle="modal"
                           data-bs-target="#myModal"
                         >
-                          Delete this account
+                          Delete this article
                         </button>
                         <input
                           type="submit"
-                          value="Save"
+                          value="Update"
                           class="btnc btnc-primary my-2"
                           aria-required="true"
                           required

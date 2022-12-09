@@ -29,8 +29,12 @@ app.get("/write/:id", async (req, res) => {
 app.get("/article", async (req, res) => {
   res.render("article", { title: "Postol Authenticate" });
 });
-app.get("/myarticle", async (req, res) => {
-  res.render("myarticle", { title: "Postol Authenticate" });
+app.get("/myarticles/:id", async (req, res) => {
+  res.render("myarticles", { title: "Postol Authenticate" });
+});
+
+app.all("*", (req, res) => {
+  res.render("404", { title: "Page not found" });
 });
 
 app.listen(PORT, () => {

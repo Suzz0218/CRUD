@@ -18,6 +18,21 @@ let storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }).single("image");
 
+// Get all Users ==> /users
+
+router.get("/users", (req, res) => {
+  User.find().exec((err, users) => {
+    if (err) {
+      req.session.notify = { message: err.message };
+      res.redirect("/users");
+    } else {
+      res.render("users", { title: "All users", users: users });
+    }
+    console.log(users);
+  });
+});
+
+// Signup Route
 router.post("/signup", upload, (req, res) => {
   let user = new User({
     fname: req.body.fname,
@@ -44,7 +59,64 @@ router.post("/signup", upload, (req, res) => {
   });
 });
 
-router.put("/profile/:id", (req, res) => {
+// Get Login Page
+router.get("/signin", (req, res) => {
+  res.render("signin", { title: "Postol Authenticate" });
+});
+
+// Post -- Login Route
+router.post("/signin", (req, res, next) => {
+  User.findOne({ email: req.body.email }, (err, user) => {
+    if (err) {
+      return next(
+        (req.session.notify = {
+          message: "Internal server error",
+          success: false,
+        })
+      );
+    }
+    console.log(user, { email: req.body.email, password: req.body.password });
+
+    if (!user) {
+      req.session.notify = {
+        message: "User not found.",
+        success: false,
+      };
+      res.redirect("/signin");
+    } else {
+      const comparePassword = bcrypt.compare(req.body.password, user.password);
+
+      if (!comparePassword) {
+        req.session.notify = {
+          message: "Invalid password",
+          success: false,
+        };
+        res.redirect("/signin");
+      } else {
+        req.session.message = {
+          user: user,
+        };
+        req.session.notify = {
+          message: "User logged in successfully",
+          success: true,
+        };
+        res.redirect("/signin");
+      }
+    }
+  });
+});
+
+// get updated profile
+router.get("/profile/:id", (req, res) => {
+  res.render("profile", { title: "Profile page" });
+});
+
+router.get("/updateprofile/:id", (req, res) => {
+  res.render("updatedProfile", { title: "Update your profile" });
+});
+
+// Profile Update route
+router.post("/updateprofile/:id", upload, (req, res) => {
   let id = req.params.id;
   let new_image = "";
 
@@ -58,79 +130,47 @@ router.put("/profile/:id", (req, res) => {
   } else {
     new_image = req.body.old_image;
   }
-  const { email, fname, lname, password } = req.body;
 
   User.findByIdAndUpdate(
     id,
-    { email, fname, lname, password, image },
+    {
+      fname: req.body.fname,
+      lname: req.body.lname,
+      email: req.body.email,
+      image: new_image,
+      password: req.body.password,
+    },
     (err, user) => {
       if (err) {
-        req.session.message = { message: err.message };
+        req.session.notify = { message: err.message };
         res.render("profile");
       } else {
-        res.render("profile", {
-          title: "Postol Forum",
-          user: user,
-        });
-        // req.session.message = { user: user };
+        req.session.message = { user: user };
+        res.redirect(`/signup`);
       }
+      console.log(user);
     }
   );
 });
 
-router.get("/signin", async (req, res) => {
-  res.render("signin", { title: "Postol Authenticate" });
-});
-
-router.post("/signin", (req, res, next) => {
-  User.findOne({ email: req.body.email }, (err, user) => {
+// Delete profile ==> /delete/profile:id
+router.get("/delete/profile/:id", (req, res) => {
+  User.findByIdAndRemove(req.params.id, (err) => {
     if (err) {
-      return next(
-        (req.session.notify = {
-          message: "Internal server error",
-          success: false,
-        })
-      );
-    }
-    console.log(req.body.email, req.body.password);
-
-    if (!user) {
-      req.session.notify = {
-        message: "User not found.",
-        success: false,
-      };
-      res.redirect("/signin");
+      req.session.notify = { message: err.message };
+      res.redirect(`/profile/${req.params.id}`);
     } else {
-      user.comparePassword(req.body.password, (err, result) => {
-        if (err) {
-          return next(
-            (req.session.notify = {
-              message: err.message,
-              success: false,
-            })
-          );
-        }
-        if (!result) {
-          req.session.notify = {
-            message: "Invalid password",
-            success: false,
-          };
-          res.redirect("/signin");
-        } else {
-          req.session.message = {
-            message: user,
-          };
-          req.session.notify = {
-            message: "User logged in successfully",
-            success: true,
-          };
-          res.redirect("/signin");
-        }
-      });
+      req.session.notify = {
+        message: "Users deleted successfully",
+        title: "Postol Forum",
+      };
+      req.session.message = null;
+      res.redirect("/signup");
     }
   });
 });
 
+// Get all articles ==> /index page
 router.get("/", (req, res) => {
   Article.find()
     .populate("user", ["fname", "lname", "image"])
@@ -147,12 +187,13 @@ router.get("/", (req, res) => {
     });
 });
 
+// Get articles by ID ==> /articles/:id
 router.get("/article/:id", (req, res) => {
   Article.findById(req.params.id)
     .populate("user", ["fname", "lname", "image"])
     .exec((err, article) => {
       if (err) {
-        req.session.message = { message: err.message };
+        req.session.notify = { message: err.message };
         res.render("article", { title: "Postol Forum" });
       } else {
         res.render("article", {
@@ -163,6 +204,24 @@ router.get("/article/:id", (req, res) => {
     });
 });
 
+// Get current user article ==> /myarticle
+router.get("/myarticles/:id", (req, res) => {
+  Article.find({ user: req.params.id })
+    .populate("user", ["fname", "lname", "image"])
+    .exec((err, articles) => {
+      if (err) {
+        req.session.notify = { message: err.message };
+        res.render("myarticles", { title: "Postol Forum" });
+      } else {
+        res.render("myarticles", {
+          title: `My articles`,
+          articles: articles,
+        });
+      }
+    });
+});
+
+// Get Write page ==> /write/:id
 router.get("/write/:id", (req, res) => {
   User.findById(req.params.id).exec((err, user) => {
     if (err) {
@@ -178,34 +237,54 @@ router.get("/write/:id", (req, res) => {
   });
 });
 
+router.get("/myarticle/:id", (req, res) => {
+  Article.findById(req.params.id)
+    .populate("user", ["fname", "lname", "image"])
+    .exec((err, article) => {
+      if (err) {
+        req.session.notify = { message: err.message };
+        res.render("article", { title: "Postol Forum" });
+      } else {
+        res.render("myarticle", {
+          title: `My article`,
+          article: article,
+        });
+      }
+      console.log(article);
+    });
+});
+
 router.post("/write/:id", (req, res) => {
   let article = new Article({
     headLine: req.body.headLine,
     subHead: req.body.subHead,
     content: req.body.content,
+    createdBy: req.body.createdBy,
     user: req.params.id,
   });
 
   article.save((err, article) => {
     if (err) {
       req.session.notify = { message: err.message };
-      res.render("write");
+      res.redirect(`/write/${req.params.id}`);
     } else {
-      res.render(`myarticle`, {
-        title: `${article.headLine} Article`,
+      res.render("myarticle", {
+        title: `${article.createdBy} Article`,
         article: article,
       });
+      console.log(article);
     }
   });
 });
 
-router.put("/write/:id", (req, res) => {
-  const { headLine, subHead, content } = req.body;
+router.post("/myarticle/:id", (req, res) => {
+  const { headLine, subHead, content, createdBy } = req.body;
 
   const updateArticle = {
     headLine,
     subHead,
     content,
+    createdBy,
     user: req.params.id,
   };
 
@@ -215,7 +294,7 @@ router.put("/write/:id", (req, res) => {
       res.render("write");
     } else {
       res.render("myarticle", {
-        title: `${article.headLine} Article`,
+        title: `My article`,
         article: article,
       });
     }
@@ -223,17 +302,23 @@ router.put("/write/:id", (req, res) => {
 });
 
 router.get("/delete/article/:id", (req, res) => {
-  Article.findByIdAndRemove(req.params.id, (err, response) => {
+  Article.findByIdAndRemove(req.params.id, (err) => {
     if (err) {
       req.session.notify = { message: err.message };
       res.render("article", { title: "Postol Forum" });
     } else {
       req.session.notify = {
         success: true,
-        response: "Article deleted successfully",
+        message: "Article deleted successfully",
       };
+      res.redirect("/");
     }
   });
+});
+
+router.get("/logout", (req, res) => {
+  req.session.message = null;
+  res.redirect("/signup");
 });
 
 module.exports = router;

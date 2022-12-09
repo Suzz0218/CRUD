@@ -40,9 +40,14 @@
 
           <% if (message) { %>
           <div>
-            <a href="/profile/<%= message.user._id%>" class="btnc-profile"
-              >Hello <%= message.user.fname + " " +  message.user.lname %></a
+            <a
+              href="/profile/<%= message.user._id%>"
+              class="fw-600 btnc-profile"
+              >Hello <%= message.user.fname + " " + message.user.lname %></a
             >
+            <a href="/logout"
+              ><i class="fa fa-sign-out" aria-hidden="true"></i
+            ></a>
           </div>
           <% } else {%>
           <div>

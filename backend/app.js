@@ -1,9 +1,11 @@
 const express = require("express");
+const favicon = require('serve-favicon')
 const session = require("express-session");
-const errorMiddleware = require("./middlewares/errors");
 const authRoute = require("./route/auth");
+const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 dotenv.config({ path: "./config/config.env" });
+
 
 const path = require("path");
 
@@ -11,8 +13,14 @@ const app = express();
 
 app.set("view engine", "ejs");
 app.set("views", "./backend/views");
+app.use(favicon(path.join(__dirname, './public', "favicon.ico")))
 
 app.use(express.json());
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 app.use(
   session({
     secret: "secretkey",
