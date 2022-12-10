@@ -2,6 +2,7 @@ const app = require("./backend/app");
 const express = require("express");
 const dotenv = require("dotenv");
 const dbConnect = require("./backend/config/dbConfig");
+const path = require("path");
 dotenv.config({ path: "./backend/config/config.env" });
 
 const PORT = process.env.PORT;
@@ -10,6 +11,7 @@ const MODE = process.env.NODE_ENV;
 dbConnect();
 
 app.use(express.static("uploads"));
+
 
 app.get("/", async (req, res) => {
   res.render("index", { title: "Postol Authenticate" });

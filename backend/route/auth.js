@@ -34,12 +34,18 @@ router.get("/users", (req, res) => {
 
 // Signup Route
 router.post("/signup", upload, (req, res) => {
+  let new_image = "";
+
+  if (req.file) {
+    new_image = req.file.filename;
+  }
+
   let user = new User({
     fname: req.body.fname,
     lname: req.body.lname,
     email: req.body.email,
     password: req.body.password,
-    image: req.file.filename,
+    image: new_image,
   });
 
   user.save((err, user) => {
@@ -75,7 +81,6 @@ router.post("/signin", (req, res, next) => {
         })
       );
     }
-    console.log(user, { email: req.body.email, password: req.body.password });
 
     if (!user) {
       req.session.notify = {
@@ -145,10 +150,14 @@ router.post("/updateprofile/:id", upload, (req, res) => {
         req.session.notify = { message: err.message };
         res.render("profile");
       } else {
-        req.session.message = { user: user };
-        res.redirect(`/signup`);
+        req.session.notify = {
+          success: true,
+          message:
+            "User profile updated successfully.\nPlease loggin again to proceed...",
+        };
+        req.session.message = null;
+        res.redirect("/signup");
       }
-      console.log(user);
     }
   );
 });

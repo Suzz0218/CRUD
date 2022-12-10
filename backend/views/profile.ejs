@@ -32,15 +32,23 @@
                   </h1>
                   <% } %>
                   <div class="col-lg-12">
-                    <% if (message) { %>
-                    <div class="col-lg-4 col-md-12 col-sm-12 profile_center">
+                    <% if (message && message.user.image !== "") { %>
+                    <div class="col-4 profile_center">
                       <img
                         src="/<%= message.user.image %> "
-                        alt=""
+                        alt="Avatar"
                         class="mt-4 avatar"
                       />
                     </div>
-
+                    <% } else {%>
+                    <div class="col-4 profile_center">
+                      <img
+                        src="/assets/ic-profile.png"
+                        class="avatar"
+                        id="image"
+                        alt="profile"
+                      />
+                    </div>
                     <% } %>
 
                     <div class="col-lg-8 col-md-12 col-sm-12 pl-4">
