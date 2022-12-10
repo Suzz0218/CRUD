@@ -14,10 +14,10 @@
               <a
                 href="/updateprofile/<%= message.user._id %>"
                 class="btnc btnc-secondary"
-                >Cancel</a>
+                >Cancel</a
+              >
               <a
-                href="/delete/profile/<% if (message) { %><%=message.user._id%>"
-                <%}%>class="btnc btnc-danger">Delete</a
+                href="/delete/profile/<% if (message) { %><%=message.user._id%>"<%}%>class="btnc btnc-danger">Delete</a
               >
             </div>
           </div>
@@ -38,20 +38,14 @@
                 enctype="multipart/form-data"
               >
                 <div class="row">
-                  <% if (message) { %>
-                  <h1 class="text-dark text-center py-4 text-lead">
-                    <%= message.user.fname +" "+ message.user.lname %>
-                  </h1>
-                  <% } %>
-                  <div class="col-12 d-flex">
-                    <% if (message) { %>
+                  <% if (message && message.user.image !== "") { %>
                     <div class="col-4 profile_center">
                       <img
                         src="/<%= message.user.image %> "
-                        alt=""
-                        id="image"
+                        alt="Avatar"
                         class="mt-4 avatar"
                       />
+
                       <label for="file" class="btnc btnc-secondary"
                         >Upload</label
                       >
@@ -62,7 +56,6 @@
                         value="<%=message.user.image %>"
                       />
                     </div>
-
                     <% } else {%>
                     <div class="col-4 profile_center">
                       <img
