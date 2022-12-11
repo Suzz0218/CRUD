@@ -40,7 +40,7 @@
                     Are you a first time user?
                   </h1>
                   <div class="col-12 d-flex">
-                    <% if (message) { %>
+                    <% if (message && message.user?.image !== "") { %>
                     <div class="col-4 profile_center">
                       <img
                         src="/<%= message.user.image %> "

@@ -29,12 +29,9 @@
               <div class="container">
                 <div class="row">
                   <div class="col-lg-4 col-md-12 col-sm-12 profile_justify">
-                    <% if (article.user?.image != null ) { %>
-                    <img
-                      src="/<%= article.user.image %>"
-                      class="avatar"
-                      alt="profile"
-                    />
+                    <% if (article.user?.image != null ) { %> 
+                    <img src="/ <% if (article.user?.image !== "") { %> <%= article.user.image %>
+                    <% } else {%>assets/ic-profile.png <% } %> "class="avatar"alt="profile" />
                     <h3 class="mt-4 fw-600">
                       Created by <%= article.createdBy %>
                     </h3>

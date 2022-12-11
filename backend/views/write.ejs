@@ -11,11 +11,25 @@
                 <div class="container">
                   <div class="row">
                     <div class="col-lg-4 col-md-12 col-sm-12 profile_justify">
+                      <% if (message && message.user?.image !== "") { %>
+                    <div class="col-4 profile_center">
                       <img
-                        src="/<%=message.user.image%>"
+                        src="/<%= message.user.image %> "
+                        alt="Avatar"
+                        class="mt-4 avatar"
+                      />
+                    </div>
+                    <% } else {%>
+                    <div class="col-4 profile_center">
+                      <img
+                        src="/assets/ic-profile.png"
                         class="avatar"
+                        id="image"
                         alt="profile"
                       />
+                    </div>
+                    <% } %> 
+                    <h3 class="mt-4 fw-600">
                       <h3 class="my-4 fw-600">
                         <%=message.user.fname +" "+ message.user.lname%>
                       </h3>
