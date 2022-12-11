@@ -29,19 +29,23 @@
               <div class="container">
                 <div class="row">
                   <div class="col-lg-4 col-md-12 col-sm-12 profile_justify">
-                    <% if (article.user?.image != null ) { %> 
-                    <img src="/ <% if (article.user?.image !== "") { %> <%= article.user.image %>
-                    <% } else {%>assets/ic-profile.png <% } %> "class="avatar"alt="profile" />
-                    <h3 class="mt-4 fw-600">
-                      Created by <%= article.createdBy %>
-                    </h3>
+                    <% if (article && article.user?.image !== null) { %>
+                    <div class="col-4 profile_center">
+                      <img
+                        src="/<%= article.user.image %> "
+                        alt="Avatar"
+                        class="mt-4 avatar"
+                      />
+                    </div>
                     <% } else {%>
-                    <img
-                      src="/assets/ic-profile.png"
-                      class="avatar"
-                      id="image"
-                      alt="profile"
-                    />
+                    <div class="col-4 profile_center">
+                      <img
+                        src="/assets/ic-profile.png"
+                        class="avatar"
+                        id="image"
+                        alt="profile"
+                      />
+                    </div>
                     <% } %>
                   </div>
                   <div class="col-lg-8 col-md-12">

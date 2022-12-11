@@ -42,12 +42,12 @@
                         class="avatar"
                         alt="profile"
                       />
-                      <h3 class="my-4">Created by: You</h3>
+                      <h3 class="my-4 fw-600">Created by: You</h3>
                     </div>
                     <div class="col-md-8">
                       <div class="my-4">
                         <input
-                          class="text-dark px-2 py-2 w-100 form-input"
+                          class="text-dark fw-600 px-2 py-2 w-100 form-input"
                           type="text"
                           name="headLine"
                           value="<%=article.headLine%>"
@@ -58,14 +58,20 @@
                       </div>
                       <div class="my-4">
                         <input
-                          class="text-dark px-2 py-2 w-100 form-input"
+                          class="text-dark fw-600 px-2 py-2 w-100 form-input"
                           type="text"
                           name="subHead"
                           value="<%=article.subHead%>"
                           placeholder="Subhead"
-                          aria-required="true"
-                          required
                         />
+                      </div>
+                      <div class="my-4">
+                        <input class="text-dark px-2 py-2 w-100 fw-600
+                        form-input" type="text" name="createdBy"
+                        value="<%=message.user.fname +" "+ message.user.lname%>"
+                        placeholder="CreatedBy, example: <%=message.user.fname
+                        +" "+ message.user.lname%>" aria-required="true"
+                        required />
                       </div>
                     </div>
                   </div>

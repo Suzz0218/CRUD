@@ -277,7 +277,7 @@ router.post("/write/:id", (req, res) => {
       req.session.notify = { message: err.message };
       res.redirect(`/write/${req.params.id}`);
     } else {
-      res.render("myarticle", {
+      res.render("writeresponse", {
         title: `${article.createdBy} Article`,
         article: article,
       });
@@ -294,7 +294,6 @@ router.post("/myarticle/:id", (req, res) => {
     subHead,
     content,
     createdBy,
-    user: req.params.id,
   };
 
   Article.findByIdAndUpdate(req.params.id, updateArticle, (err, article) => {
